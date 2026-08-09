@@ -1,47 +1,107 @@
+'use client'
+
+import { useMemo, useState } from 'react'
+import {
+  ArrowRight,
+  Award,
+  BadgeCheck,
+  BookOpen,
+  Check,
+  ChevronDown,
+  Clock3,
+  GraduationCap,
+  House,
+  Menu,
+  MessageCircle,
+  Search,
+  ShieldCheck,
+  Star,
+  Target,
+  UserRound,
+  UsersRound,
+  X,
+} from 'lucide-react'
+
+const ADMIN_NUMBER = '923001234567'
+
+const tutors = [
+  { code: 'DHT-101', name: 'Muhammad Ahsan', initials: 'MA', qualification: 'M.Sc Physics, PU', experience: '6+ Years Exp', rating: '4.9', classes: ['FSc', 'Matric'], subjects: ['Physics', 'Maths'], mode: 'Home Tuition', tone: 'bg-blue-100 text-blue-800' },
+  { code: 'DHT-118', name: 'Dr. Hira Saleem', initials: 'HS', qualification: 'M.Phil English, LUMS', experience: '8+ Years Exp', rating: '5.0', classes: ['O/A Levels', 'Spoken English'], subjects: ['English', 'IELTS'], mode: 'Live Online', tone: 'bg-emerald-100 text-emerald-800' },
+  { code: 'DHT-123', name: 'Usman Khalid', initials: 'UK', qualification: 'BS Mathematics, LUMS', experience: '5+ Years Exp', rating: '4.8', classes: ['Matric', 'FSc'], subjects: ['Maths', 'Calculus'], mode: 'Home Tuition', tone: 'bg-violet-100 text-violet-800' },
+  { code: 'DHT-137', name: 'Ayesha Tariq', initials: 'AT', qualification: 'M.Sc Chemistry, UET', experience: '7+ Years Exp', rating: '4.9', classes: ['Matric', 'FSc'], subjects: ['Chemistry', 'Biology'], mode: 'Home Tuition', tone: 'bg-amber-100 text-amber-800' },
+  { code: 'DHT-142', name: 'Hamza Rauf', initials: 'HR', qualification: 'BS Computer Science, FAST', experience: '4+ Years Exp', rating: '4.9', classes: ['O/A Levels', 'FSc'], subjects: ['Computer Science', 'Coding'], mode: 'Live Online', tone: 'bg-cyan-100 text-cyan-800' },
+  { code: 'DHT-156', name: 'Sana Iqbal', initials: 'SI', qualification: 'B.Ed, Punjab University', experience: '9+ Years Exp', rating: '5.0', classes: ['Primary', 'Spoken English'], subjects: ['All Primary', 'English'], mode: 'Home Tuition', tone: 'bg-rose-100 text-rose-800' },
+]
+
+const benefits = [
+  { icon: BadgeCheck, title: 'Verified & Expert Teachers', text: 'Degree, CNIC and background checks completed before every tutor joins our network.' },
+  { icon: Target, title: 'No More Ratta System', text: 'Concept-first lessons, past paper techniques and the confidence to think independently.' },
+  { icon: UserRound, title: 'Personalized 1-on-1 Attention', text: 'A customized pace and individual care designed around every student’s learning gaps.' },
+  { icon: House, title: 'Home & Online Flexibility', text: 'Male and female tutors for home tuition in major cities and live online worldwide.' },
+  { icon: ShieldCheck, title: 'Admin Accountability & Tracking', text: 'Monthly performance checks and one clear line of communication for parents.' },
+]
+
+const reviews = [
+  { quote: 'In just three months, my daughter moved from a C to an A in Physics. The tutor explains every concept patiently and keeps us updated.', name: 'Mrs. Farah Ahmed', detail: 'Parent of Grade 10 student' },
+  { quote: 'What stood out was the discipline. Classes start on time, homework is checked, and my son now studies without being pushed.', name: 'Mr. Bilal Khan', detail: 'Parent of O Level student' },
+  { quote: 'The focus on concepts and past papers made a huge difference. My daughter walked into her exams feeling prepared, not stressed.', name: 'Mrs. Nadia Hussain', detail: 'Parent of FSc student' },
+]
+
+function whatsappUrl(message: string) {
+  return `https://wa.me/${ADMIN_NUMBER}?text=${encodeURIComponent(message)}`
+}
+
 export default function Page() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const [filter, setFilter] = useState('All')
+  const [bookingTutor, setBookingTutor] = useState<(typeof tutors)[number] | null>(null)
+  const [leadOpen, setLeadOpen] = useState(false)
+  const [applyOpen, setApplyOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+
+  const filteredTutors = useMemo(() => tutors.filter((tutor) => {
+    const searchable = `${tutor.name} ${tutor.qualification} ${tutor.code} ${tutor.subjects.join(' ')} ${tutor.classes.join(' ')}`.toLowerCase()
+    return (filter === 'All' || tutor.classes.includes(filter)) && searchable.includes(query.toLowerCase())
+  }), [filter, query])
+
+  const openAdmin = () => window.open(whatsappUrl('Assalam-o-Alaikum Admin, I would like to discuss finding a tutor from Dreamers Home Tutors.'), '_blank', 'noopener,noreferrer')
+  const closeModals = () => { setBookingTutor(null); setLeadOpen(false); setApplyOpen(false); setSubmitted(false) }
+
   return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
+          <a href="#top" className="flex items-center gap-3" aria-label="Dreamers Home Tutors home">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm"><GraduationCap className="h-5 w-5" /></span>
+            <span className="leading-tight"><span className="block font-serif text-lg font-bold tracking-tight">Dreamers</span><span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Home Tutors</span></span>
+          </a>
+          <nav className="hidden items-center gap-8 text-sm font-medium md:flex"><a href="#tutors" className="transition-colors hover:text-primary">Find a tutor</a><a href="#why-us" className="transition-colors hover:text-primary">Why us</a><a href="#stories" className="transition-colors hover:text-primary">Parent stories</a></nav>
+          <button onClick={openAdmin} className="hidden items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/15 transition-transform hover:-translate-y-0.5 md:flex"><MessageCircle className="h-4 w-4" /> Contact Admin</button>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="rounded-lg p-2 md:hidden" aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
+        </div>
+        {menuOpen && <nav className="border-t border-border px-5 py-4 md:hidden"><div className="flex flex-col gap-4 text-sm font-semibold"><a href="#tutors" onClick={() => setMenuOpen(false)}>Find a tutor</a><a href="#why-us" onClick={() => setMenuOpen(false)}>Why choose us</a><a href="#stories" onClick={() => setMenuOpen(false)}>Parent stories</a><button onClick={openAdmin} className="flex w-fit items-center gap-2 rounded-full bg-primary px-4 py-2 text-primary-foreground"><MessageCircle className="h-4 w-4" /> Contact Admin</button></div></nav>}
+      </header>
+
+      <section id="top" className="relative overflow-hidden bg-primary text-primary-foreground">
+        <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.15)_1px,transparent_1px)] [background-size:44px_44px]" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-28">
+          <div className="max-w-2xl"><div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-wide"><span className="h-2 w-2 rounded-full bg-emerald-400" /> Trusted by families across Pakistan</div><h1 className="font-serif text-5xl font-bold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">Pakistan&apos;s trusted tutors at your <span className="text-emerald-300">doorstep.</span></h1><p className="mt-6 max-w-xl text-base leading-7 text-blue-100 sm:text-lg">Aap ke bachon ke behtar mustaqbil ke liye verified aur experienced subject specialist teachers. Ratta system se jaan churayein aur 100% conceptual clarity paayein.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><a href="#tutors" className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400 px-6 py-3.5 text-sm font-bold text-emerald-950 transition hover:bg-emerald-300">Find Best Tutor <ArrowRight className="h-4 w-4" /></a><button onClick={openAdmin} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-bold backdrop-blur transition hover:bg-white/20"><MessageCircle className="h-4 w-4" /> Talk to Admin</button></div><div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs font-medium text-blue-100"><span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-300" /> CNIC verified</span><span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-300" /> Female & male tutors</span><span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-300" /> Admin managed</span></div></div>
+          <div className="relative mx-auto w-full max-w-md"><div className="rounded-[2rem] border border-white/20 bg-white/10 p-3 shadow-2xl backdrop-blur-sm"><div className="rounded-[1.5rem] bg-slate-50 p-6 text-slate-900"><div className="flex items-center justify-between border-b border-slate-200 pb-5"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-emerald-600">Your learning plan</p><h2 className="mt-1 font-serif text-2xl font-bold">Built around your child</h2></div><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-100 text-primary"><Target className="h-5 w-5" /></span></div><div className="space-y-3 py-6"><div className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700"><UsersRound className="h-4 w-4" /></span><div><p className="text-sm font-bold">1-on-1 attention</p><p className="text-xs text-slate-500">Personalized pace and care</p></div><Check className="ml-auto h-4 w-4 text-emerald-500" /></div><div className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 text-primary"><BookOpen className="h-4 w-4" /></span><div><p className="text-sm font-bold">Concept-first lessons</p><p className="text-xs text-slate-500">Learn, practice, improve</p></div><Check className="ml-auto h-4 w-4 text-emerald-500" /></div><div className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-700"><Award className="h-4 w-4" /></span><div><p className="text-sm font-bold">Progress tracking</p><p className="text-xs text-slate-500">Monthly parent updates</p></div><Check className="ml-auto h-4 w-4 text-emerald-500" /></div></div><button onClick={openAdmin} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white">Start with a free consultation <ArrowRight className="h-4 w-4" /></button></div></div><div className="absolute -bottom-5 -left-5 rounded-2xl bg-emerald-400 px-4 py-3 text-emerald-950 shadow-xl"><p className="font-serif text-2xl font-bold">4.9/5</p><p className="text-[10px] font-bold uppercase tracking-wider">Parent rating</p></div></div>
+        </div>
+      </section>
+
+      <section id="why-us" className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-600">The Dreamers difference</p><h2 className="mt-3 font-serif text-4xl font-bold tracking-tight text-primary sm:text-5xl">More than tuition.<br /><span className="text-foreground">A better learning journey.</span></h2></div><div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">{benefits.map(({ icon: Icon, title, text }, index) => <article key={title} className={`bg-card p-6 ${index === 0 ? 'lg:rounded-l-3xl' : ''}`}><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-primary"><Icon className="h-5 w-5" /></span><h3 className="mt-5 text-base font-bold leading-5">{title}</h3><p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p></article>)}</div></section>
+
+      <section id="tutors" className="bg-white py-20"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-600">Meet your match</p><h2 className="mt-3 font-serif text-4xl font-bold tracking-tight text-primary sm:text-5xl">Find a tutor who<br /><span className="text-foreground">gets your child.</span></h2></div><p className="max-w-sm text-sm leading-6 text-muted-foreground">Browse our trusted network. Share a tutor code with our admin and we&apos;ll handle the rest, from matching to monthly check-ins.</p></div><div className="mt-10 flex flex-col gap-3 lg:flex-row"><label className="relative flex-1"><Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><span className="sr-only">Search tutors</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by name, subject or qualification" className="h-12 w-full rounded-xl border border-border bg-background pl-11 pr-4 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15" /></label><div className="relative"><select value={filter} onChange={(e) => setFilter(e.target.value)} className="h-12 w-full appearance-none rounded-xl border border-border bg-background px-4 pr-10 text-sm font-semibold outline-none focus:border-primary sm:min-w-48"><option>All</option><option>Primary</option><option>Matric</option><option>FSc</option><option>O/A Levels</option><option>Spoken English</option></select><ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /></div></div><div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{filteredTutors.map((tutor) => <article key={tutor.code} className="group rounded-2xl border border-border bg-background p-5 transition hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"><div className="flex items-start justify-between"><div className="flex items-center gap-3"><div className={`flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-bold ${tutor.tone}`}>{tutor.initials}</div><div><h3 className="font-bold">{tutor.name}</h3><p className="mt-0.5 text-xs text-muted-foreground">{tutor.qualification}</p></div></div><span className="rounded-full bg-blue-50 px-2.5 py-1 font-mono text-[10px] font-bold text-primary">{tutor.code}</span></div><div className="mt-5 flex items-center gap-3 text-xs font-semibold"><span className="flex items-center gap-1 text-amber-600"><Star className="h-3.5 w-3.5 fill-current" /> {tutor.rating}</span><span className="h-1 w-1 rounded-full bg-border" /><span className="text-muted-foreground">{tutor.experience}</span></div><div className="mt-4 flex flex-wrap gap-2">{tutor.subjects.map((subject) => <span key={subject} className="rounded-md bg-white px-2.5 py-1 text-xs font-medium text-muted-foreground shadow-sm ring-1 ring-border">{subject}</span>)}</div><div className="mt-5 flex items-center justify-between border-t border-border pt-4"><span className="text-xs font-semibold text-muted-foreground">{tutor.mode}</span><button onClick={() => setBookingTutor(tutor)} className="rounded-lg bg-primary px-3.5 py-2 text-xs font-bold text-primary-foreground transition hover:bg-primary/90">Book This Tutor</button></div></article>)}</div>{filteredTutors.length === 0 && <div className="rounded-2xl border border-dashed border-border py-14 text-center text-sm text-muted-foreground">No tutors match those filters. Try another search or <button onClick={() => { setQuery(''); setFilter('All') }} className="font-bold text-primary underline">reset the directory</button>.</div>}</div></section>
+
+      <section id="stories" className="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-600">Parent stories</p><h2 className="mt-3 font-serif text-4xl font-bold tracking-tight text-primary sm:text-5xl">Results parents<br /><span className="text-foreground">can feel.</span></h2></div><div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground"><span className="flex text-amber-500"><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /></span> 4.9 average rating</div></div><div className="mt-10 grid gap-5 lg:grid-cols-3">{reviews.map((review) => <figure key={review.name} className="rounded-2xl border border-border bg-white p-7"><div className="flex text-amber-500"><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /><Star className="h-4 w-4 fill-current" /></div><blockquote className="mt-5 text-base leading-7">&quot;{review.quote}&quot;</blockquote><figcaption className="mt-7 border-t border-border pt-4"><p className="text-sm font-bold">{review.name}</p><p className="mt-1 text-xs text-muted-foreground">{review.detail}</p></figcaption></figure>)}</div></section>
+
+      <section className="mx-5 overflow-hidden rounded-3xl bg-emerald-400 lg:mx-auto lg:max-w-7xl"><div className="flex flex-col items-start justify-between gap-8 px-7 py-10 sm:px-12 lg:flex-row lg:items-center lg:py-12"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-950/65">Join the network</p><h2 className="mt-3 max-w-2xl font-serif text-3xl font-bold tracking-tight text-emerald-950 sm:text-4xl">Are you a qualified teacher looking for Home/Online Tuition jobs?</h2><p className="mt-3 max-w-xl text-sm leading-6 text-emerald-950/75">Join a platform that values your expertise, brings you serious students, and keeps admin support close.</p></div><button onClick={() => setApplyOpen(true)} className="inline-flex shrink-0 items-center gap-2 rounded-full bg-emerald-950 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-emerald-900">Apply as Tutor <ArrowRight className="h-4 w-4" /></button></div></section>
+
+      <footer className="mt-20 bg-primary text-blue-100"><div className="mx-auto grid max-w-7xl gap-12 px-5 py-14 lg:grid-cols-[1.3fr_1fr_1fr] lg:px-8"><div><div className="flex items-center gap-3 text-white"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10"><GraduationCap className="h-5 w-5" /></span><span className="font-serif text-xl font-bold">Dreamers Home Tutors</span></div><p className="mt-5 max-w-xs text-sm leading-6 text-blue-200">Quality Education. Guaranteed Results. Helping Pakistan&apos;s learners find their right teacher.</p></div><div><h3 className="text-sm font-bold text-white">Contact Admin</h3><div className="mt-4 space-y-3 text-sm"><button onClick={openAdmin} className="flex items-center gap-2 text-left hover:text-white"><MessageCircle className="h-4 w-4 text-emerald-300" /> +92 300 1234567</button><p className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-emerald-300" /> Mon–Sat, 9am–8pm</p></div></div><div><h3 className="text-sm font-bold text-white">Our office</h3><p className="mt-4 text-sm leading-6">Lahore Campus / Office<br />Location details coming soon</p><div className="mt-4 flex gap-3 text-sm font-semibold"><a href="#top" className="hover:text-white">Facebook</a><a href="#top" className="hover:text-white">Instagram</a><a href="#top" className="hover:text-white">LinkedIn</a></div></div></div><div className="border-t border-white/10"><div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-blue-300 sm:flex-row sm:justify-between lg:px-8"><p>© 2025 Dreamers Home Tutors. All rights reserved.</p><p>Teacher contact details are kept private for your safety.</p></div></div></footer>
+
+      {(bookingTutor || leadOpen || applyOpen) && <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/55 p-4 backdrop-blur-sm sm:items-center" onMouseDown={(e) => { if (e.target === e.currentTarget) closeModals() }}><div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl sm:p-8"><div className="flex items-start justify-between"><div><p className="text-xs font-bold uppercase tracking-[.18em] text-emerald-600">{applyOpen ? 'Tutor application' : leadOpen ? 'Send inquiry' : 'Admin-managed booking'}</p><h2 className="mt-2 font-serif text-3xl font-bold text-primary">{applyOpen ? 'Join Dreamers' : leadOpen ? 'Tell us what you need' : `Book ${bookingTutor?.name}`}</h2></div><button onClick={closeModals} className="rounded-full bg-slate-100 p-2 text-slate-600" aria-label="Close dialog"><X className="h-4 w-4" /></button></div>{submitted ? <div className="py-10 text-center"><span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"><Check /></span><h3 className="mt-4 text-xl font-bold">Thank you. Admin has your details.</h3><p className="mt-2 text-sm text-muted-foreground">We&apos;ll connect with you on WhatsApp shortly.</p><button onClick={closeModals} className="mt-6 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white">Done</button></div> : bookingTutor ? <div className="mt-7 space-y-3"><button onClick={() => window.open(whatsappUrl(`Assalam-o-Alaikum Admin, I want to book Tutor ${bookingTutor.code} from Dreamers Home Tutors.`), '_blank', 'noopener,noreferrer')} className="flex w-full items-center gap-4 rounded-2xl bg-emerald-500 p-4 text-left text-emerald-950 transition hover:bg-emerald-400"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/40"><MessageCircle /></span><span><strong className="block">WhatsApp Admin directly</strong><small className="mt-1 block opacity-75">Fastest way to start your inquiry</small></span><ArrowRight className="ml-auto h-4 w-4" /></button><button onClick={() => { setBookingTutor(null); setLeadOpen(true) }} className="flex w-full items-center gap-4 rounded-2xl border border-border p-4 text-left transition hover:border-primary"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-primary"><BookOpen className="h-5 w-5" /></span><span><strong className="block">Fill a short inquiry form</strong><small className="mt-1 block text-muted-foreground">We&apos;ll send your request to admin</small></span><ArrowRight className="ml-auto h-4 w-4 text-primary" /></button><p className="pt-3 text-center text-xs text-muted-foreground">Tutor contact details are never shared directly.</p></div> : <form onSubmit={(e) => { e.preventDefault(); const data = Object.fromEntries(new FormData(e.currentTarget).entries()); const message = applyOpen ? `Assalam-o-Alaikum Admin, I want to apply as a tutor. Name: ${data.name}; Phone: ${data.phone}; Qualification: ${data.qualification}; City: ${data.city}; Subjects and experience: ${data.details}.` : `Assalam-o-Alaikum Admin, I want to book Tutor ${bookingTutor?.code ?? ''} from Dreamers Home Tutors. Parent: ${data.name}; Phone: ${data.phone}; Class: ${data.className}; Subject: ${data.subject}; Location: ${data.details}.`; window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer'); setSubmitted(true) }} className="mt-7 space-y-4"><div className="grid gap-4 sm:grid-cols-2">{(applyOpen ? [['Full name', 'Your name'], ['Phone / WhatsApp', '03xx xxxxxxx'], ['Qualification', 'e.g. M.Sc Physics'], ['City', 'e.g. Lahore']] : [['Parent name', 'Your name'], ['Phone / WhatsApp', '03xx xxxxxxx'], ['Student class', 'e.g. Grade 9'], ['Subject', 'e.g. Mathematics']]).map(([label, placeholder]) => <label key={label} className="block text-sm font-semibold">{label}<input required name={label === 'Student class' ? 'className' : label.toLowerCase().replace(' / whatsapp', '').replaceAll(' ', '')} placeholder={placeholder} className="mt-2 h-11 w-full rounded-lg border border-border px-3 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/15" /></label>)}</div><label className="block text-sm font-semibold">{applyOpen ? 'Subjects and experience' : 'Location'}<input required name="details" placeholder={applyOpen ? 'Tell us what you teach and for how long' : 'Area / city for home tuition'} className="mt-2 h-11 w-full rounded-lg border border-border px-3 text-sm font-normal outline-none focus:border-primary focus:ring-2 focus:ring-primary/15" /></label><button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-bold text-white">Send to Admin <ArrowRight className="h-4 w-4" /></button></form>}</div></div>}
     </main>
   )
 }
